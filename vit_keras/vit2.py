@@ -99,13 +99,17 @@ def build_model(
         image_size_tuple[1] % patch_size == 0
     ), "image_size must be a multiple of patch_size"
     x = tf.keras.layers.Input(shape=(image_size_tuple[0], image_size_tuple[1], 3))
-    y = tf.keras.layers.Conv2D(
-        filters=hidden_size,
-        kernel_size=patch_size,
-        strides=patch_size,
-        padding="valid",
-        name="embedding",
-    )(x)
+  #  y = tf.keras.layers.Conv2D(
+  #      filters=hidden_size,
+  #      kernel_size=patch_size,
+  #      strides=patch_size,
+  #      padding="valid",
+  #      name="embedding",
+  #  )(x)
+    y = tf.keras.applications.vgg16.VGG16(
+        include_top=True,
+        weights='imagenet',
+     )(x)
     y = tf.keras.layers.Reshape((y.shape[1] * y.shape[2], hidden_size))(y)
     y = layers.ClassToken(name="class_token")(y)
     y = layers.AddPositionEmbs(name="Transformer/posembed_input")(y)
