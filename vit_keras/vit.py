@@ -3,6 +3,8 @@ import warnings
 import tensorflow as tf
 import typing_extensions as tx
 
+
+
 from . import layers, utils
 
 ConfigDict = tx.TypedDict(
@@ -106,6 +108,7 @@ def build_model(
   #      padding="valid",
   #      name="embedding",
   #  )(x)
+    x = tf.keras.applications.vgg16.preprocess_input(x)
     y = tf.keras.applications.vgg16.VGG16(
         include_top=True,
         weights='imagenet',
